@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,8 +29,8 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <h1>🔐 RFID Auth</h1>
-          <p>Smart Authentication Dashboard</p>
+          <h1>⚡ Synexis</h1>
+          <p>Smart Automation System</p>
         </div>
 
         {error && <div className="login-error">{error}</div>}

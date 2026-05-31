@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { HiOutlineViewGrid, HiOutlineUsers, HiOutlineCreditCard, HiOutlineClipboardList, HiOutlineChip, HiOutlineLogout } from 'react-icons/hi';
+import { HiOutlineViewGrid, HiOutlineUsers, HiOutlineCreditCard, HiOutlineClipboardList, HiOutlineChip, HiOutlineLightningBolt, HiOutlineDocumentText, HiOutlineLogout } from 'react-icons/hi';
 import { useAuth } from '../hooks/useAuth';
 import './Sidebar.css';
 
@@ -9,6 +9,8 @@ const navItems = [
   { path: '/cards', label: 'Cards', icon: <HiOutlineCreditCard /> },
   { path: '/logs', label: 'Access Logs', icon: <HiOutlineClipboardList /> },
   { path: '/devices', label: 'Devices', icon: <HiOutlineChip /> },
+  { path: '/smart-home', label: 'Smart Home', icon: <HiOutlineLightningBolt /> },
+  { path: '/action-logs', label: 'Action Logs', icon: <HiOutlineDocumentText /> },
 ];
 
 export default function Sidebar() {
@@ -18,15 +20,28 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <div className="brand-icon">🔐</div>
+        <div className="brand-icon">⚡</div>
         <div className="brand-text">
-          <h2>RFID Auth</h2>
-          <span>Smart Access</span>
+          <h2>Synexis</h2>
+          <span>Smart System</span>
         </div>
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
+        <div className="nav-section-label">General</div>
+        {navItems.slice(0, 5).map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+          >
+            <span className="nav-icon">{item.icon}</span>
+            <span className="nav-label">{item.label}</span>
+          </NavLink>
+        ))}
+
+        <div className="nav-section-label">Automation</div>
+        {navItems.slice(5).map((item) => (
           <NavLink
             key={item.path}
             to={item.path}

@@ -7,6 +7,8 @@ import Users from './pages/Users';
 import Cards from './pages/Cards';
 import AccessLogs from './pages/AccessLogs';
 import Devices from './pages/Devices';
+import SmartActions from './pages/SmartActions';
+import ActionLogs from './pages/ActionLogs';
 
 function ProtectedLayout() {
   const { user, isLoading } = useAuth();
@@ -31,6 +33,8 @@ function ProtectedLayout() {
           <Route path="/cards" element={<Cards />} />
           <Route path="/logs" element={<AccessLogs />} />
           <Route path="/devices" element={<Devices />} />
+          <Route path="/smart-home" element={<SmartActions />} />
+          <Route path="/action-logs" element={<ActionLogs />} />
         </Routes>
       </div>
     </div>

@@ -71,4 +71,18 @@ export const devicesAPI = {
     api.put(`/devices/${id}`, data),
 };
 
+// Smart Home Actions
+export const actionsAPI = {
+  getAll: (params?: { cardUID?: string; userId?: string; provider?: string; enabled?: string }) =>
+    api.get('/actions', { params }),
+  getById: (id: string) => api.get(`/actions/${id}`),
+  create: (data: Record<string, unknown>) => api.post('/actions', data),
+  update: (id: string, data: Record<string, unknown>) => api.put(`/actions/${id}`, data),
+  delete: (id: string) => api.delete(`/actions/${id}`),
+  testFire: (id: string) => api.post(`/actions/${id}/test`),
+  getProviders: () => api.get('/actions/providers'),
+  getLogs: (params?: { page?: number; limit?: number; actionId?: string; cardUID?: string; status?: string; provider?: string }) =>
+    api.get('/actions/logs', { params }),
+};
+
 export default api;
