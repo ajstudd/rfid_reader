@@ -79,22 +79,18 @@ void loop() {
     }
     lastCardReadTime = now;
 
-    // Card detected!
     Serial.println();
     Serial.print("[CARD] UID detected: ");
     Serial.println(uid);
 
-    // Validate with backend
     ValidationResponse response = validateCard(uid);
 
     if (!response.success) {
-        // API request failed (network error, server down, etc.)
         Serial.println("[CARD] Backend unreachable — showing error");
         showError();
         return;
     }
 
-    // Act on response
     if (response.authorized) {
         Serial.print("[CARD] Welcome, ");
         Serial.println(response.userName);

@@ -83,6 +83,23 @@ export default function DynamicConfigForm({ schema, values, onChange, disabled }
           </select>
         );
 
+      case 'color':
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <input
+              type="color"
+              className="color-picker"
+              value={String(currentValue || '#ffffff')}
+              onChange={(e) => handleChange(field.key, e.target.value)}
+              disabled={disabled}
+              id={`config-${field.key}`}
+            />
+            <span style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+              {String(currentValue || '#ffffff').toUpperCase()}
+            </span>
+          </div>
+        );
+
       case 'json':
         return (
           <>

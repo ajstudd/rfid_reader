@@ -56,7 +56,7 @@ export default function Cards() {
           <tbody>
             {usersWithCards.map((u) => (
               <tr key={u._id}>
-                <td style={{ fontFamily: 'monospace', color: 'var(--accent-blue)', fontWeight: 600 }}>{u.cardUID}</td>
+                <td style={{ fontFamily: 'monospace', color: 'var(--accent)', fontWeight: 600 }}>{u.cardUID}</td>
                 <td style={{ fontWeight: 500 }}>{u.name}</td>
                 <td><span className="badge active" style={{ textTransform: 'capitalize' }}>{u.role}</span></td>
                 <td><span className={`badge ${u.isActive ? 'active' : 'inactive'}`}>{u.isActive ? 'Active' : 'Inactive'}</span></td>

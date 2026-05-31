@@ -26,7 +26,7 @@ interface ActionCardProps {
 const triggerLabels: Record<string, { label: string; color: string }> = {
   on_authorized: { label: 'On Authorized', color: 'var(--color-granted)' },
   on_denied: { label: 'On Denied', color: 'var(--color-denied)' },
-  on_any: { label: 'On Any Tap', color: 'var(--accent-blue)' },
+  on_any: { label: 'On Any Tap', color: 'var(--accent)' },
 };
 
 export default function ActionCard({

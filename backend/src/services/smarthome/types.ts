@@ -77,7 +77,7 @@ export interface ValidationResult {
 export interface ConfigField {
   key: string;
   label: string;
-  type: 'string' | 'number' | 'boolean' | 'select' | 'json';
+  type: 'string' | 'number' | 'boolean' | 'select' | 'json' | 'color';
   required: boolean;
   default?: any;
   description?: string;

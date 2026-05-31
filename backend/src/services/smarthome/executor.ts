@@ -143,7 +143,7 @@ async function executeSingleAction(
 
     if (!provider) {
       const errorMsg = `Provider "${action.provider}" not found`;
-      log.error('ACTIONS', `❌ ${errorMsg} for action "${action.name}"`);
+      log.error('ACTIONS', `[FAIL] ${errorMsg} for action "${action.name}"`);
 
       await ActionLog.create({
         actionId: action._id,
@@ -195,9 +195,9 @@ async function executeSingleAction(
     });
 
     if (result.success) {
-      log.info('ACTIONS', `✅ "${action.name}" completed in ${durationMs}ms`);
+      log.info('ACTIONS', `[ OK ] "${action.name}" completed in ${durationMs}ms`);
     } else {
-      log.warn('ACTIONS', `❌ "${action.name}" failed: ${result.message}`);
+      log.warn('ACTIONS', `[FAIL] "${action.name}" failed: ${result.message}`);
     }
   } catch (error: any) {
     const durationMs = Date.now() - startTime;

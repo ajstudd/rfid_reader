@@ -28,7 +28,7 @@ export default function Devices() {
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>{d.name}</h3>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 2 }}>{d.location}</p>
               </div>
-              <span className={`badge ${d.status}`}><span className="badge-dot"></span>{d.status}</span>
+              <span className={`badge ${d.status}`}>{d.status}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               <span>ID: <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{d.deviceId}</span></span>

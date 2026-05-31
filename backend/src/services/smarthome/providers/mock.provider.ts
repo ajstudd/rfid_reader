@@ -28,7 +28,7 @@ export class MockProvider implements ISmartHomeProvider {
     const deviceName = config.mockDeviceName || 'Mock Device';
 
     log.info('MOCK', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    log.info('MOCK', `🎭 Simulating: ${action} → "${deviceName}"`);
+    log.info('MOCK', `[SIM] Simulating: ${action} → "${deviceName}"`);
     log.info('MOCK', `   Card: ${context.cardUID}`);
     log.info('MOCK', `   User: ${context.userName || 'Unknown'}`);
     log.info('MOCK', `   Delay: ${delay}ms | Will succeed: ${shouldSucceed}`);
@@ -37,7 +37,7 @@ export class MockProvider implements ISmartHomeProvider {
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     if (!shouldSucceed) {
-      log.warn('MOCK', `   ❌ Simulated failure for "${deviceName}"`);
+      log.warn('MOCK', `   [FAIL] Simulated failure for "${deviceName}"`);
       log.info('MOCK', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
       return {
         success: false,
@@ -48,13 +48,13 @@ export class MockProvider implements ISmartHomeProvider {
     let stateMessage = '';
     switch (action) {
       case 'turn_on':
-        stateMessage = `${deviceName} turned ON 💡`;
+        stateMessage = `${deviceName} turned ON (*)`;
         break;
       case 'turn_off':
-        stateMessage = `${deviceName} turned OFF ⚫`;
+        stateMessage = `${deviceName} turned OFF ( )`;
         break;
       case 'toggle':
-        stateMessage = `${deviceName} toggled 🔄`;
+        stateMessage = `${deviceName} toggled (~)`;
         break;
       case 'set_brightness':
         const brightness = config.brightness || 100;
@@ -64,7 +64,7 @@ export class MockProvider implements ISmartHomeProvider {
         stateMessage = `${deviceName}: ${action}`;
     }
 
-    log.info('MOCK', `   ✅ ${stateMessage}`);
+    log.info('MOCK', `   [ OK ] ${stateMessage}`);
     log.info('MOCK', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
     return {

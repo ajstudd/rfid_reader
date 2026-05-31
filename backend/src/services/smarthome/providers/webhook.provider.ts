@@ -77,7 +77,7 @@ export class WebhookProvider implements ISmartHomeProvider {
       const responseText = await response.text();
 
       if (response.ok) {
-        log.info('WEBHOOK', `✅ ${response.status} response from ${url}`);
+        log.info('WEBHOOK', `[ OK ] ${response.status} response from ${url}`);
         return {
           success: true,
           message: `Webhook responded ${response.status}`,
@@ -87,7 +87,7 @@ export class WebhookProvider implements ISmartHomeProvider {
           },
         };
       } else {
-        log.warn('WEBHOOK', `❌ ${response.status} from ${url}: ${responseText.substring(0, 200)}`);
+        log.warn('WEBHOOK', `[FAIL] ${response.status} from ${url}: ${responseText.substring(0, 200)}`);
         return {
           success: false,
           message: `Webhook returned ${response.status}: ${responseText.substring(0, 200)}`,

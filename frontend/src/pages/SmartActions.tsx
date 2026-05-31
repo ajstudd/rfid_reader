@@ -226,14 +226,13 @@ export default function SmartActions() {
     <div className="page-wrapper">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Smart Home</h1>
-        <span className={`badge ${isConnected ? 'online' : 'offline'}`}>
-          <span className="badge-dot" />
+        <span style={{ fontSize: '0.7rem', fontWeight: 500, color: isConnected ? 'var(--color-success)' : 'var(--text-muted)' }}>
           {isConnected ? 'Live' : 'Offline'}
         </span>
       </div>
-      <p className="page-subtitle">Manage smart home actions triggered by RFID card taps</p>
+      <p className="page-subtitle">Manage actions triggered by card taps</p>
 
       {/* Toolbar */}
       <div className="toolbar">
@@ -309,9 +308,9 @@ export default function SmartActions() {
       {/* Live Activity Feed */}
       {actionEvents.length > 0 && (
         <div className="glass-card" style={{ marginTop: 32 }}>
-          <h3 style={{ marginBottom: 16, fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <HiOutlineLightningBolt style={{ color: 'var(--accent-blue)' }} />
-            Live Action Feed
+          <h3 style={{ marginBottom: 16, fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <HiOutlineLightningBolt style={{ color: 'var(--accent)' }} />
+            Activity
           </h3>
           <div className="live-feed" style={{ maxHeight: 300 }}>
             {actionEvents.slice(0, 20).map((evt: ActionExecutedEvent, i: number) => (

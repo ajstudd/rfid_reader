@@ -117,11 +117,11 @@ export class PhilipsHueProvider implements ISmartHomeProvider {
           .filter((r: any) => r.error)
           .map((r: any) => r.error.description)
           .join('; ');
-        log.warn('HUE', `❌ ${errorMsg}`);
+        log.warn('HUE', `[FAIL] ${errorMsg}`);
         return { success: false, message: `Hue error: ${errorMsg}` };
       }
 
-      log.info('HUE', `✅ ${action} successful`);
+      log.info('HUE', `[ OK ] ${action} successful`);
       return {
         success: true,
         message: `Hue ${targetType}/${targetId}: ${action}`,

@@ -12,7 +12,6 @@ export default function Dashboard() {
     logsAPI.getStats().then((res) => setStats(res.data.today)).catch(console.error);
   }, []);
 
-  // Update stats when new taps come in
   useEffect(() => {
     if (cardTaps.length > 0) {
       logsAPI.getStats().then((res) => setStats(res.data.today)).catch(console.error);
@@ -26,14 +25,13 @@ export default function Dashboard() {
 
   return (
     <div className="page-wrapper">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Dashboard</h1>
-        <span className={`badge ${isConnected ? 'online' : 'offline'}`}>
-          <span className="badge-dot"></span>
+        <span style={{ fontSize: '0.7rem', fontWeight: 500, color: isConnected ? 'var(--color-success)' : 'var(--text-muted)' }}>
           {isConnected ? 'Live' : 'Offline'}
         </span>
       </div>
-      <p className="page-subtitle">Real-time access monitoring overview</p>
+      <p className="page-subtitle">Real-time access monitoring</p>
 
       <div className="stats-grid">
         <div className="stat-card">
@@ -55,13 +53,13 @@ export default function Dashboard() {
       </div>
 
       <div className="glass-card">
-        <h3 style={{ marginBottom: 16, fontSize: '1rem', fontWeight: 600 }}>Live Activity Feed</h3>
+        <h3 style={{ marginBottom: 16, fontSize: '0.9rem', fontWeight: 600 }}>Activity</h3>
         <div className="live-feed">
           {cardTaps.length === 0 ? (
             <div className="empty-state">
               <div className="icon">📡</div>
-              <h3>Waiting for card taps...</h3>
-              <p>Tap an RFID card on the ESP32 reader to see events here</p>
+              <h3>Waiting for card taps</h3>
+              <p>Tap an RFID card on the reader to see events here</p>
             </div>
           ) : (
             cardTaps.map((tap: CardTapEvent, i: number) => (
@@ -71,7 +69,7 @@ export default function Dashboard() {
                 </div>
                 <div className="feed-info">
                   <div className="feed-name">{tap.userName || 'Unknown Card'}</div>
-                  <div className="feed-detail">UID: {tap.uid} · {tap.deviceId}</div>
+                  <div className="feed-detail">{tap.uid} · {tap.deviceId}</div>
                 </div>
                 <span className={`badge ${tap.status}`}>{tap.status}</span>
                 <span className="feed-time">{formatTime(tap.timestamp)}</span>

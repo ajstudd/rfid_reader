@@ -43,10 +43,10 @@ export default function AccessLogs() {
             {logs.map((l) => (
               <tr key={l._id}>
                 <td style={{ whiteSpace: 'nowrap', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{formatDate(l.timestamp)}</td>
-                <td style={{ fontFamily: 'monospace', color: 'var(--accent-blue)' }}>{l.uid}</td>
+                <td style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{l.uid}</td>
                 <td>{l.userId?.name || <span style={{ color: 'var(--text-muted)' }}>Unknown</span>}</td>
                 <td>{l.deviceId}</td>
-                <td><span className={`badge ${l.status}`}><span className="badge-dot"></span>{l.status}</span></td>
+                <td><span className={`badge ${l.status}`}>{l.status}</span></td>
               </tr>
             ))}
             {logs.length === 0 && (

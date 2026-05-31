@@ -83,14 +83,14 @@ export class KasaProvider implements ISmartHomeProvider {
       const result = await this.sendCommand(deviceIp, port, command);
 
       if (result.success) {
-        log.info('KASA', `✅ ${action} successful for ${deviceIp}`);
+        log.info('KASA', `[ OK ] ${action} successful for ${deviceIp}`);
         return {
           success: true,
           message: `Kasa device ${deviceIp}: ${action}`,
           data: result.data,
         };
       } else {
-        log.warn('KASA', `❌ Command failed: ${result.message}`);
+        log.warn('KASA', `[FAIL] Command failed: ${result.message}`);
         return result;
       }
     } catch (error: any) {

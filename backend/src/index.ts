@@ -104,7 +104,7 @@ async function start() {
   initSocket(server);
 
   server.listen(PORT, () => {
-    log.info('SERVER', `🚀 Backend running on http://localhost:${PORT}`);
+    log.info('SERVER', `[SYSTEM GO] Backend running on http://localhost:${PORT}`);
     log.info('SERVER', `   Health: http://localhost:${PORT}/health`);
     log.info('SERVER', `   API:    http://localhost:${PORT}/api`);
   });

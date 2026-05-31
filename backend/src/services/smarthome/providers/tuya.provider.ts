@@ -107,14 +107,14 @@ export class TuyaProvider implements ISmartHomeProvider {
       const result: any = await response.json();
 
       if (result.success) {
-        log.info('TUYA', `✅ ${action} successful for device ${deviceId}`);
+        log.info('TUYA', `[ OK ] ${action} successful for device ${deviceId}`);
         return {
           success: true,
           message: `Tuya device ${deviceId}: ${action}`,
           data: result,
         };
       } else {
-        log.warn('TUYA', `❌ Error: ${result.msg}`);
+        log.warn('TUYA', `[FAIL] Error: ${result.msg}`);
         return { success: false, message: `Tuya error: ${result.msg}` };
       }
     } catch (error: any) {

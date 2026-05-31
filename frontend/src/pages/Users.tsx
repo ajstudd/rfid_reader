@@ -68,7 +68,7 @@ export default function Users() {
                 <td style={{ fontWeight: 500 }}>{u.name}</td>
                 <td style={{ color: 'var(--text-secondary)' }}>{u.email}</td>
                 <td><span className="badge active" style={{ textTransform: 'capitalize' }}>{u.role}</span></td>
-                <td style={{ fontFamily: 'monospace', color: u.cardUID ? 'var(--accent-blue)' : 'var(--text-muted)' }}>
+                <td style={{ fontFamily: 'monospace', color: u.cardUID ? 'var(--accent)' : 'var(--text-muted)' }}>
                   {u.cardUID || '—'}
                 </td>
                 <td><span className={`badge ${u.isActive ? 'active' : 'inactive'}`}>{u.isActive ? 'Active' : 'Inactive'}</span></td>

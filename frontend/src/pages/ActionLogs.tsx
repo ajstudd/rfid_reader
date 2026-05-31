@@ -156,7 +156,7 @@ export default function ActionLogs() {
                     <ProviderBadge provider={log.provider} size="sm" showLabel={false} />
                   </td>
                   <td>
-                    <code style={{ color: 'var(--accent-blue)', fontSize: '0.8rem' }}>{log.cardUID}</code>
+                    <code style={{ color: 'var(--accent)', fontSize: '0.8rem' }}>{log.cardUID}</code>
                   </td>
                   <td>
                     <span className={`badge ${log.status === 'success' ? 'active' : log.status === 'failed' ? 'inactive' : 'unknown'}`} style={{ gap: 4 }}>

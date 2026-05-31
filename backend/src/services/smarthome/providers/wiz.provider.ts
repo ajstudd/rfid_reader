@@ -72,12 +72,64 @@ export class WizProvider implements ISmartHomeProvider {
     try {
       let wizCommand: Record<string, any>;
 
-      switch (action) {
-        case 'turn_on': {
-          const params: any = { state: true };
-          if (config.brightness !== undefined) {
-            params.dimming = Math.max(10, Math.min(100, config.brightness));
+      const buildParams = (cfg: Record<string, any>) => {
+        const p: Record<string, any> = {};
+        if (cfg.brightness !== undefined) p.dimming = Math.max(10, Math.min(100, cfg.brightness));
+        
+        if (cfg.sceneId !== undefined && action === 'set_scene') {
+          p.sceneId = cfg.sceneId;
+          return p;
+        }
+
+        let r = -1, g = -1, b = -1;
+        if (cfg.colorHex && typeof cfg.colorHex === 'string') {
+          const hex = cfg.colorHex.replace(/^#/, '').toLowerCase();
+          if (hex.length === 6) {
+            r = parseInt(hex.substring(0, 2), 16);
+            g = parseInt(hex.substring(2, 4), 16);
+            b = parseInt(hex.substring(4, 6), 16);
           }
+        } else if (cfg.r !== undefined || cfg.g !== undefined || cfg.b !== undefined) {
+          r = Math.max(0, Math.min(255, cfg.r || 255));
+          g = Math.max(0, Math.min(255, cfg.g || 255));
+          b = Math.max(0, Math.min(255, cfg.b || 255));
+        }
+
+        const isWhite = r === 255 && g === 255 && b === 255;
+        const hasColor = r !== -1;
+
+        if (action === 'set_color') {
+          if (isWhite) {
+            // Pure white on RGB LEDs looks purple/blue. Route to dedicated white LEDs.
+            p.temp = cfg.colorTemp || 4000;
+          } else {
+            p.r = r; p.g = g; p.b = b;
+          }
+        } else if (action === 'set_color_temp') {
+          p.temp = cfg.colorTemp !== undefined ? Math.max(2200, Math.min(6500, cfg.colorTemp)) : 4000;
+        } else {
+          // For toggle/turn_on: prioritize non-white color, then temp, then scene
+          if (hasColor && !isWhite) {
+            p.r = r; p.g = g; p.b = b;
+          } else if (cfg.colorTemp !== undefined) {
+            p.temp = Math.max(2200, Math.min(6500, cfg.colorTemp));
+          } else if (cfg.sceneId !== undefined) {
+            p.sceneId = cfg.sceneId;
+          } else if (isWhite) {
+            p.temp = 4000; // Fallback for #ffffff
+          }
+        }
+        
+        return p;
+      };
+
+      switch (action) {
+        case 'turn_on':
+        case 'set_brightness':
+        case 'set_color_temp':
+        case 'set_color':
+        case 'set_scene': {
+          const params: any = { state: true, ...buildParams(config) };
           wizCommand = { method: 'setPilot', params };
           break;
         }
@@ -91,52 +143,16 @@ export class WizProvider implements ISmartHomeProvider {
           const state = await this.sendUDP(deviceIp, { method: 'getPilot' });
           if (state.success && state.data?.result) {
             const isOn = state.data.result.state;
-            wizCommand = { method: 'setPilot', params: { state: !isOn } };
+            const params: any = { state: !isOn };
+            if (!isOn) {
+              // If we are turning it ON, apply the rest of the config (colors, brightness)
+              Object.assign(params, buildParams(config));
+            }
+            wizCommand = { method: 'setPilot', params };
           } else {
-            // Fallback: just turn on
-            wizCommand = { method: 'setPilot', params: { state: true } };
+            // Fallback: just turn on with config
+            wizCommand = { method: 'setPilot', params: { state: true, ...buildParams(config) } };
           }
-          break;
-        }
-
-        case 'set_brightness': {
-          const brightness = Math.max(10, Math.min(100, config.brightness || 100));
-          wizCommand = {
-            method: 'setPilot',
-            params: { state: true, dimming: brightness },
-          };
-          break;
-        }
-
-        case 'set_color_temp': {
-          // WiZ supports 2200K to 6500K
-          const temp = Math.max(2200, Math.min(6500, config.colorTemp || 4000));
-          const params: any = { state: true, temp };
-          if (config.brightness !== undefined) {
-            params.dimming = Math.max(10, Math.min(100, config.brightness));
-          }
-          wizCommand = { method: 'setPilot', params };
-          break;
-        }
-
-        case 'set_color': {
-          const r = Math.max(0, Math.min(255, config.r || 255));
-          const g = Math.max(0, Math.min(255, config.g || 255));
-          const b = Math.max(0, Math.min(255, config.b || 255));
-          const params: any = { state: true, r, g, b };
-          if (config.brightness !== undefined) {
-            params.dimming = Math.max(10, Math.min(100, config.brightness));
-          }
-          wizCommand = { method: 'setPilot', params };
-          break;
-        }
-
-        case 'set_scene': {
-          const sceneId = config.sceneId || 1;
-          wizCommand = {
-            method: 'setPilot',
-            params: { state: true, sceneId },
-          };
           break;
         }
 
@@ -147,14 +163,14 @@ export class WizProvider implements ISmartHomeProvider {
       const result = await this.sendUDP(deviceIp, wizCommand);
 
       if (result.success) {
-        log.info('WIZ', `✅ ${action} successful for ${deviceIp}`);
+        log.info('WIZ', `[ OK ] ${action} successful for ${deviceIp}`);
         return {
           success: true,
           message: `WiZ bulb ${deviceIp}: ${action}`,
           data: result.data,
         };
       } else {
-        log.warn('WIZ', `❌ ${action} failed: ${result.message}`);
+        log.warn('WIZ', `[FAIL] ${action} failed: ${result.message}`);
         return result;
       }
     } catch (error: any) {
@@ -311,25 +327,12 @@ export class WizProvider implements ISmartHomeProvider {
         description: 'Color temperature in Kelvin (2200 = warm, 6500 = cool daylight). Used by set_color_temp action.',
       },
       {
-        key: 'r',
-        label: 'Red (RGB)',
-        type: 'number',
+        key: 'colorHex',
+        label: 'Color',
+        type: 'color',
         required: false,
-        description: 'Red channel 0-255. Used by set_color action.',
-      },
-      {
-        key: 'g',
-        label: 'Green (RGB)',
-        type: 'number',
-        required: false,
-        description: 'Green channel 0-255. Used by set_color action.',
-      },
-      {
-        key: 'b',
-        label: 'Blue (RGB)',
-        type: 'number',
-        required: false,
-        description: 'Blue channel 0-255. Used by set_color action.',
+        default: '#ffffff',
+        description: 'Choose a color. Used by set_color action.',
       },
       {
         key: 'sceneId',
