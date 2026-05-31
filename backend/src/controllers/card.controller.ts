@@ -3,6 +3,7 @@ import User from '../models/User';
 import AccessLog from '../models/AccessLog';
 import Device from '../models/Device';
 import { emitCardTap, emitDeviceStatus } from '../services/socket.service';
+import { executeActions } from '../services/smarthome/executor';
 import log from '../utils/logger';
 
 /**
@@ -71,6 +72,15 @@ export const validateCard = async (req: Request, res: Response): Promise<void> =
       deviceId,
       timestamp: accessLog.timestamp,
     });
+
+    // Fire smart home actions (non-blocking — don't delay ESP32 response)
+    executeActions({
+      cardUID: uid.toUpperCase(),
+      userId: user?._id?.toString() || null,
+      status,
+      userName,
+      deviceId,
+    }).catch((err) => log.error('ACTIONS', 'Execution failed:', err));
 
     res.json({
       authorized: status === 'authorized',

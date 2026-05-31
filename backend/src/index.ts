@@ -11,6 +11,8 @@ import userRoutes from './routes/user.routes';
 import logRoutes from './routes/log.routes';
 import deviceRoutes from './routes/device.routes';
 import authRoutes from './routes/auth.routes';
+import actionRoutes from './routes/action.routes';
+import { initProviders } from './services/smarthome/registry';
 import User from './models/User';
 import Device from './models/Device';
 import bcrypt from 'bcryptjs';
@@ -38,6 +40,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/actions', actionRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {
@@ -93,6 +96,9 @@ async function seedDatabase() {
 async function start() {
   await connectDB();
   await seedDatabase();
+
+  // Initialize smart home providers
+  initProviders();
 
   // Initialize Socket.IO
   initSocket(server);

@@ -59,3 +59,22 @@ export const emitDeviceStatus = (data: {
     io.emit('device:status', data);
   }
 };
+
+/**
+ * Emit a smart home action execution result to all connected dashboard clients.
+ */
+export const emitActionExecuted = (data: {
+  actionId: string;
+  actionName: string;
+  provider: string;
+  cardUID: string;
+  userName: string | null;
+  status: 'success' | 'failed';
+  message: string;
+  durationMs: number;
+  timestamp: Date;
+}): void => {
+  if (io) {
+    io.emit('action:executed', data);
+  }
+};
